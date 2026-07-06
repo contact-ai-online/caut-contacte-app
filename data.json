@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Ruslan Șcerbatiuc",
+        "category": "Profesor | Fondator contact-ai.online",
+        "location": "Chișinău",
+        "description": "Profesor de Istorie și Educație pentru Societate. Creator de sisteme AI locale.",
+        "contact": "+373 67 111 657",
+        "verified": true
+    },
+    {
+        "name": "Elena Munteanu",
+        "category": "Consultant Juridic / Avocat",
+        "location": "Chișinău / Online",
+        "description": "Specializată în drept civil și asistență juridică pentru afaceri mici.",
+        "contact": "elena.munteanu@exemplu.md",
+        "verified": true
+    },
+    {
+        "name": "Victor Guțu",
+        "category": "Meșter Auto (Mecanic)",
+        "location": "Ialoveni",
+        "description": "Diagnosticare auto, reparații suspensie și motoare. Experiență off-road.",
+        "contact": "+373 69 333 444",
+        "verified": true
+    }
+]

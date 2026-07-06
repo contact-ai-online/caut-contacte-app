@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Căutare Rapidă | contact-ai.online</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Bara de navigare către platforma principală -->
+    <nav class="w-full bg-blue-900 text-white py-2 px-4 text-center text-sm shadow-md">
+        Cauți mai multe funcționalități? 
+        <a href="https://contact-ai.online" class="font-bold underline hover:text-blue-200 ml-2 transition-colors">
+            Întoarce-te la platforma principală contact-ai.online &rarr;
+        </a>
+    </nav>
+
+    <!-- Header & Căutare -->
+    <main class="flex-grow flex flex-col items-center pt-16 px-4">
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-blue-900 mb-2 text-center">
+            contact-ai<span class="text-blue-500">.online</span>
+        </h1>
+        <p class="text-gray-500 mb-8 text-center max-w-md">
+            Găsește instantaneu specialiști și profesioniști verificați din Republica Moldova. Versiunea rapidă.
+        </p>
+
+        <!-- Bara de Căutare -->
+        <div class="w-full max-w-2xl relative mb-10 shadow-lg rounded-full">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i class="fas fa-search text-gray-400"></i>
+            </div>
+            <input 
+                type="text" 
+                id="searchInput" 
+                class="block w-full pl-12 pr-4 py-4 rounded-full border-0 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-500 text-lg sm:leading-6" 
+                placeholder="Caută (ex: profesor istorie, fondator, avocat)..."
+                autocomplete="off"
+            >
+        </div>
+
+        <!-- Container Rezultate -->
+        <div id="resultsContainer" class="w-full max-w-2xl space-y-4 pb-12">
+            <!-- Cardurile vor fi generate aici prin JavaScript -->
+        </div>
+    </main>
+
+    <!-- Footer cu butonul de Bot Telegram -->
+    <footer class="bg-white border-t border-gray-200 py-6 text-center">
+        <p class="text-gray-600 mb-3">Ești profesionist și vrei să apari aici gratuit?</p>
+        <a href="https://t.me/AICI_PUI_LINKUL_BOTULUI_TAU" target="_blank" class="inline-flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full transition-colors shadow-md">
+            <i class="fab fa-telegram-plane"></i>
+            Adaugă profilul prin Telegram
+        </a>
+    </footer>
+
+    <!-- Scriptul Motorului de Căutare și Baza de Date -->
+    <script>
+        // Baza de date "Seed"
+        const profiles = [
+            {
+                id: 1,
+                name: "Ruslan Șcerbatiuc",
+                profession: "Profesor | Fondator contact-ai.online & Creator Sisteme AI",
+                location: "Chișinău",
+                description: "Profesor de Istorie și Educație pentru Societate. Sunt fondatorul platformei contact-ai.online și creator de ajutoare AI și sisteme AI cu rulare locală.",
+                contact: "+373 67 111 657",
+                verified: true
+            },
+            {
+                id: 2,
+                name: "Elena Munteanu",
+                profession: "Consultant Juridic / Avocat",
+                location: "Chișinău / Online",
+                description: "Specializată în drept civil și asistență juridică pentru afaceri mici și mijlocii.",
+                contact: "elena.munteanu@exemplu.md",
+                verified: true
+            },
+            {
+                id: 3,
+                name: "Alexandru Rotaru",
+                profession: "Electrician Autorizat",
+                location: "Chișinău (Sectorul Botanica)",
+                description: "Intervenții rapide, montare rețele electrice pentru apartamente noi, diagnosticare și reparații.",
+                contact: "+373 79 111 222",
+                verified: false
+            },
+            {
+                id: 4,
+                name: "Maria Ceban",
+                profession: "Designer Grafic & Web",
+                location: "Remote / Bălți",
+                description: "Creare identitate vizuală, logo-uri și materiale promoționale. Design interfețe web minimaliste.",
+                contact: "portofoliu-maria.md",
+                verified: true
+            },
+            {
+                id: 5,
+                name: "Victor Guțu",
+                profession: "Meșter Auto (Mecanic)",
+                location: "Ialoveni",
+                description: "Diagnosticare auto, reparații suspensie și motoare. Specializare pe mașini europene și modele clasice de teren.",
+                contact: "+373 69 333 444",
+                verified: true
+            }
+        ];
+
+        const searchInput = document.getElementById('searchInput');
+        const resultsContainer = document.getElementById('resultsContainer');
+
+        function createProfileCard(profile) {
+            const badge = profile.verified 
+                ? `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"><i class="fas fa-check-circle"></i> Verificat</span>` 
+                : `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">În așteptare</span>`;
+
+            return `
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">${profile.name}</h3>
+                        ${badge}
+                    </div>
+                    <p class="text-blue-600 font-medium mb-1"><i class="fas fa-briefcase mr-2"></i>${profile.profession}</p>
+                    <p class="text-gray-500 text-sm mb-3"><i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>${profile.location}</p>
+                    <p class="text-gray-700 text-sm mb-4 leading-relaxed">${profile.description}</p>
+                    <div class="pt-3 border-t border-gray-50">
+                        <p class="text-gray-900 font-semibold"><i class="fas fa-address-book mr-2 text-blue-500"></i>${profile.contact}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderResults(query = "") {
+            const lowerCaseQuery = query.toLowerCase().trim();
+            
+            const filteredData = profiles.filter(profile => {
+                const searchString = `${profile.name} ${profile.profession} ${profile.location} ${profile.description}`.toLowerCase();
+                return searchString.includes(lowerCaseQuery);
+            });
+
+            if (filteredData.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="text-center py-10 bg-white rounded-2xl border border-dashed border-gray-300">
+                        <i class="fas fa-search-minus text-gray-300 text-4xl mb-3"></i>
+                        <p class="text-gray-500">Nu am găsit rezultate pentru "${query}".</p>
+                    </div>`;
+                return;
+            }
+
+            resultsContainer.innerHTML = filteredData.map(createProfileCard).join('');
+        }
+
+        renderResults();
+
+        searchInput.addEventListener('input', (e) => {
+            renderResults(e.target.value);
+        });
+    </script>
+</body>
+</html>
